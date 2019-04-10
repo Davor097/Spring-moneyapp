@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="head">
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js">
+    <title>Expense Tracker</title>
+</head>
+<body class="container-fluid">
+<form method="post" th:object="${payment}" class="col-4 offset-4">
+    <h1 class="offset-3">Unos troška</h1>
+    <div class="form-group">
+        <label>Naziv:</label>
+        <input type="text" th:field="*{name}" class="form-control">
+    </div>
+
+    <div class="form-group">
+        <label>Iznos:</label>
+        <input type="number" th:field="*{amount}" class="form-control">
+    </div>
+    <div class="form-group">
+        <label>Vrsta:</label>
+        <select th:field="*{type}" class="form-control">
+            <option value="">---Odaberite vrijednost---</option>
+            <option th:each="paymentType : ${paymentTypes}" th:value="${paymentType}" th:text="${paymentType}"></option>
+        </select>
+    </div>
+
+    <!--<input type="hidden" th:field="${wallet}">-->
+    <div class="form-group">
+        <input type="submit" value="Unesi trosak" class="btn btn-primary">
+        <input type="reset" value="Obrisi" class="btn btn-danger">
+    </div>
+
+    <input type="hidden" name="_csrf" th:value="${_csrf.token}"/>
+</form>
+</body>
+</html>

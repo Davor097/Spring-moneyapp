@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<html lang="en">
+<head th:fragment="head">
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js">
+    <title>Expense Tracker</title>
+</head>
+<body class="container-fluid">
+    <header>
+        <div>
+            <span sec:autorize="isAuthenticated()">Pozdrav, <span sec:authentication="name"></span></span>
+            <a th:href="@{/logout}" class="btn btn-danger">Odjava</a>
+        </div>
+    </header>
+    <div class="col-4 offset-4">
+        Uneseni podatci:
+        <div>
+            Tip troska: <span th:text="${expense.type}"></span> <br>
+            Naziv troska: <span th:text="${expense.name}"></span> <br>
+            Iznos troska: <span th:text="${expense.amount}"></span><br>
+            Trenutno stanje racuna: <span th:text="${wallet.currentAmount}"></span><br>
+          <!--  Svi troskovi: <span th:text="${wallet.expenses}"></span> -->
+            Datum: <span th:text="${date}"></span><br>
+        </div>
+        <a th:href="@{/expenses/new}" class="btn btn-danger">Unesi novi trosak</a>
+        <a sec:authorize="hasRole('ADMIN')" th:href="@{/expenses/resetWallet}" class="btn btn-warning">Resetiraj novcanik</a>
+    </div>
+</body>
+</html>

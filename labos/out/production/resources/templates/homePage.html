@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<html lang="en">
+<head th:fragment="head">
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js">
+    <title>Expense Tracker</title>
+</head>
+<body class="container-fluid">
+    <header>
+        <div>
+            <span sec:autorize="isAuthenticated()">Pozdrav, <span sec:authentication="name"></span></span>
+            <a th:href="@{/logout}" class="btn btn-danger">Odjava</a>
+        </div>
+    </header>
+    <div class="col-6 offset-5">
+        <a th:href="@{/expenses/new}" class="btn btn-danger">Unesi novi trosak</a>
+        <a th:href="@{/expenses/newPay}" class="btn btn-danger">Unesi novu uplatu</a>
+        <a th:href="@{/adminPage}" sec:authorize="hasRole('ADMIN')" class="btn btn-success">Admin page</a>
+    </div>
+</body>
+</html>

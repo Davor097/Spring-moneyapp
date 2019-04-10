@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head th:fragment="head">
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js">
+    <title>Expense Tracker</title>
+</head>
+<body class="container-fluid">
+    <header>
+        <div>
+            <span sec:autorize="isAuthenticated()">Pozdrav, <span sec:authentication="name"></span></span>
+            <a th:href="@{/logout}" class="btn btn-danger">Odjava</a>
+        </div>
+    </header>
+    <form method="post" th:action="@{/expenses/new}" th:object="${expense}" class="col-4 offset-4">
+        <h1 class="offset-3">Unos troška</h1>
+        <div class="form-group">
+            <label>Naziv:</label>
+            <input type="text" th:field="*{name}" class="form-control">
+            <span th:if="${#fields.hasErrors('name')}" th:errors="*{name}" style="color: #ff0000;">Name error</span>
+        </div>
+
+        <div class="form-group">
+            <label>Iznos:</label>
+            <input type="number" th:field="*{amount}" class="form-control">
+            <span th:if="${#fields.hasErrors('amount')}" th:errors="*{amount}" class="validation-error" style="color: #ff0000;">Amount error</span>
+        </div>
+        <div class="form-group">
+            <label>Vrsta:</label>
+            <select th:field="*{type}" class="form-control">
+                <option value="">---Odaberite vrijednost---</option>
+                <option th:each="expenseType : ${expenseTypes}" th:value="${expenseType}" th:text="${expenseType}"></option>
+            </select>
+            <span th:if="${#fields.hasErrors('type')}" th:errors="*{type}" class="validation-error" style="color: #ff0000;">Type error</span>
+        </div>
+
+        <!--<input type="hidden" th:field="${wallet}">-->
+        <div class="form-group">
+            <input type="submit" value="Unesi trosak" class="btn btn-primary">
+            <input type="reset" value="Obrisi" class="btn btn-danger">
+        </div>
+
+        <input type="hidden" name="_csrf" th:value="${_csrf.token}"/>
+    </form>
+</body>
+</html>
