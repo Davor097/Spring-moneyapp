@@ -17,7 +17,8 @@
     <div class="col-6 offset-5">
         <a th:href="@{/expenses/new}" class="btn btn-danger">Unesi novi trosak</a>
         <a th:href="@{/expenses/newPay}" class="btn btn-danger">Unesi novu uplatu</a>
-        <a th:href="@{/adminPage}" sec:authorize="hasRole('ADMIN')" class="btn btn-success">Admin page</a>
+        <a th:href="@{/expenses/editor}" class="btn btn-success">Pregled troskova</a>
+       <!-- <a th:href="@{/adminPage}" sec:authorize="hasRole('ADMIN')" class="btn btn-success">Admin page</a> -->
     </div>
 </body>
 </html>

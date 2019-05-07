@@ -10,14 +10,18 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.support.SessionStatus;
 import tvz.labos.models.*;
+import tvz.labos.repositories.ExpenseRepository;
 import tvz.labos.repositories.JdbcExpenseRepository;
 import tvz.labos.repositories.JdbcWalletRepository;
+import tvz.labos.repositories.WalletRepository;
 import tvz.labos.utils.SecurityUtils;
 
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.List;
 
 @Controller
 @RequestMapping("/expenses")
@@ -26,10 +30,10 @@ public class ExpenseController {
     final Logger logger = LoggerFactory.getLogger(ExpenseController.class);
 
     @Autowired
-    private JdbcExpenseRepository expenseRepository;
+    private ExpenseRepository expenseRepository;
 
     @Autowired
-    private JdbcWalletRepository walletRepository;
+    private WalletRepository walletRepository;
 
     @ModelAttribute("wallet")
     public Wallet getWallet() {
@@ -99,7 +103,7 @@ public class ExpenseController {
         model.addAttribute("expense", expense);
         model.addAttribute("date", date);
         logger.info("Expense object filled with data");
-
+        expense.setDate(LocalDateTime.now());
         expenseRepository.save(expense, wallet);
         logger.info("New expense saved.");
         updateWallet(wallet);
@@ -107,6 +111,16 @@ public class ExpenseController {
 
         return "resultPage";
     }
+
+    @GetMapping("/editor")
+    public String expenseEditor(Model model, @SessionAttribute("wallet") Wallet wallet) {
+        List<Expense> expenses = wallet.getExpenses();
+        model.addAttribute("expenses", expenses);
+
+        return "expenseEditorPage";
+    }
+
+
 
 
 
@@ -120,7 +134,7 @@ public class ExpenseController {
         return PaymentType.values();
     }
 
-    public void addPaymentToWallet(Payment payment, Wallet wallet) {
+  /*  public void addPaymentToWallet(Payment payment, Wallet wallet) {
         if (wallet == null) {
             wallet.initializeWallet();
         }
@@ -146,5 +160,5 @@ public class ExpenseController {
         logger.info("Wallet updated.");
 
         return "payResultPage";
-    }
+    }*/
 }

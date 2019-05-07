@@ -29,21 +29,22 @@ public class JdbcExpenseRepository implements ExpenseRepository {
 
     public JdbcExpenseRepository(JdbcTemplate jdbc) {
         this.jdbc = jdbc;
-        this.expenseInserter = new SimpleJdbcInsert(this.jdbc).withTableName("expenses").usingGeneratedKeyColumns("id");
+        this.expenseInserter = new SimpleJdbcInsert(this.jdbc).withTableName("expense").usingGeneratedKeyColumns("id");
     }
 
     @Override
     public Iterable<Expense> findAll() {
-        return jdbc.query("select id, name, amount, type, date, walletId from expenses", this::mapRowToExpense);
+        return jdbc.query("select id, name, amount, type, date, walletId from expense", this::mapRowToExpense);
     }
 
     @Override
     public Expense findOne(Long id) {
-        return jdbc.queryForObject("select id, name, amount, type, date, walletId from expenses where id = ?", this::mapRowToExpense, id);
+        return jdbc.queryForObject("select id, name, amount, type, date, walletId from expense where id = ?", this::mapRowToExpense, id);
     }
 
+    @Override
     public Iterable<Expense> findAllByWalletId(Long id) {
-        return jdbc.query("select id, name, amount, type, date, walletId from expenses where walletId = ?", this::mapRowToExpense, id);
+        return jdbc.query("select id, name, amount, type, date, walletId from expense where walletId = ?", this::mapRowToExpense, id);
     }
 
     @Override
@@ -53,6 +54,9 @@ public class JdbcExpenseRepository implements ExpenseRepository {
         return expense;
     }
 
+    @Override
+    public void delete(Expense expense){}
+
     private Expense mapRowToExpense(ResultSet rs, int rowNum) {
         Expense expense = new Expense();
         try {
@@ -61,7 +65,7 @@ public class JdbcExpenseRepository implements ExpenseRepository {
             expense.setAmount(rs.getInt("amount"));
             expense.setType(ExpenseType.valueOf(rs.getString("type")));
             expense.setDate(rs.getTimestamp("date").toLocalDateTime());
-            expense.setWalletId(rs.getLong("walletId"));
+         //   expense.setWalletId(rs.getLong("walletId"));
         } catch (Exception ex) {
             logger.error("Error while mapping Expenses");
         }

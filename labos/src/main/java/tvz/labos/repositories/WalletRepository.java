@@ -7,4 +7,5 @@ public interface WalletRepository {
     Wallet findOne(Long id);
     Wallet findOneByOwner(String owner);
     Wallet save(Wallet expense);
+    void delete(Wallet wallet);
 }

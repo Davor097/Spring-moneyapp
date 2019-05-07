@@ -10,14 +10,17 @@
 <body class="container-fluid">
 <header>
     <div>
+        <div th:each="user:${authorities}" th:value="${user.name}">
+            <a th:if="${user.authority.equals('ROLE_ADMIN') == 1 && user.name.equals(currentUser) != 1}" th:href="@{/removeAdmin + user.name}"></a>
+            <a th:if="${user.authority.equals('ROLE_ADMIN') != 1} && user.name.equals(currentUser) != 1" th:href="@{/addAdmin + user.name}"></a>
+        </div>
         <span sec:autorize="isAuthenticated()">Pozdrav, <span sec:authentication="name"></span></span>
         <a th:href="@{/logout}" class="btn btn-danger">Odjava</a>
     </div>
 </header>
 <div class="col-6 offset-5">
     <div>
-        Vase dodjeljene role:
-        <span sec:authentication="principal.authorities"></span><br>
+
         <a th:href="@{/home}" class="btn btn-danger">Back to home</a>
     </div>
 </div>
