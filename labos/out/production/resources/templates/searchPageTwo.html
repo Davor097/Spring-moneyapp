@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<html lang="en">
+<head th:fragment="head">
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js">
+    <title>Expense Tracker</title>
+</head>
+<body class="container-fluid">
+<header>
+    <div>
+        <span sec:autorize="isAuthenticated()">Pozdrav, <span sec:authentication="name"></span></span>
+        <a th:href="@{/logout}" class="btn btn-danger">Odjava</a>
+    </div>
+</header>
+
+<form method="post" th:action="@{/expenses/search}" th:object="${expense}">
+    <label>Naziv:</label>
+    <input type="text" th:field="${expense.name}" th:value="${expense.getName()}">
+    <input type="submit" th:value="Pretraga">
+</form>
+        <div th:if="${expenses.isEmpty()}">Pretraga nije vratila niti jedan rezultat.</div>
+        <table th:if="${!expenses.isEmpty()}">
+            <tr>
+                <td>Naziv</td>
+                <td>Vrsta</td>
+                <td>Iznos</td>
+            </tr>
+            <tr th:each="expenseObject:${expenses}">
+                <td th:text="${expenseObject.getName()}"></td>
+                <td th:text="${expenseObject.getType()}"></td>
+                <td th:text="${expenseObject.getAmount()}"></td>
+            </tr>
+        </table>
+
+
+</body>
+</html>

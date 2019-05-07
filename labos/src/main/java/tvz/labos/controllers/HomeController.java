@@ -6,25 +6,19 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.SessionAttribute;
 import tvz.labos.models.*;
 import tvz.labos.repositories.ExpenseRepository;
-import tvz.labos.repositories.JdbcAuthoritiesRepository;
-import tvz.labos.repositories.JdbcUserRepository;
 import tvz.labos.repositories.WalletRepository;
-import tvz.labos.utils.SecurityUtils;
-
-import java.util.ArrayList;
 
 @Controller
 public class HomeController {
-
+/*
     @Autowired
     JdbcAuthoritiesRepository jdbcAuthoritiesRepository;
 
     @Autowired
     JdbcUserRepository jdbcUserRepository;
-
+*/
     @Autowired
     ExpenseRepository expenseRepository;
 
@@ -44,14 +38,14 @@ public class HomeController {
 
     @GetMapping("/deleteExpense")
     public String deleteExpense(@RequestParam("expenseId") Long expenseId) {
-        Expense expense = expenseRepository.findOne(expenseId);
+        Expense expense = expenseRepository.findFirstById(expenseId);
         expenseRepository.delete(expense);
         return "redirect:/home";
     }
 
     @GetMapping("/editExpense")
     public String editExpense(@RequestParam("expenseId") Long expenseId, Model model) {
-        Expense expense = expenseRepository.findOne(expenseId);
+        Expense expense = expenseRepository.findFirstById(expenseId);
         model.addAttribute("expense", expense);
 
         return "formPage";

@@ -12,6 +12,7 @@
         <div>
             <span sec:autorize="isAuthenticated()">Pozdrav, <span sec:authentication="name"></span></span>
             <a th:href="@{/logout}" class="btn btn-danger">Odjava</a>
+            <a th:href="@{/home}" class="btn btn-success">Home</a>
         </div>
     </header>
     <form method="post" th:action="@{/expenses/new}" th:object="${expense}" class="col-4 offset-4">

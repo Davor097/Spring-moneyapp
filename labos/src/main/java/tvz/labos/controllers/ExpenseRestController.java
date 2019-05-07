@@ -30,7 +30,7 @@ public class ExpenseRestController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Expense> findOne(@PathVariable Long id) {
-        Expense expense = expenseRepository.findOne(id);
+        Expense expense = expenseRepository.findFirstById(id);
         if (expense != null) {
             return new ResponseEntity<>(expense, HttpStatus.OK);
         } else {
@@ -41,12 +41,7 @@ public class ExpenseRestController {
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping(consumes = "application/json")
     public Expense save(@RequestBody Expense expense) {
-        Wallet userWallet = walletRepository.findOneByOwner(SecurityUtils.getUsername());
-        if (userWallet != null) {
-            return expenseRepository.save(expense, userWallet);
-        } else {
-            return null;
-        }
+            return expenseRepository.save(expense);
     }
 
     @PutMapping("/{name}")
@@ -57,7 +52,7 @@ public class ExpenseRestController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/{id}")
     public void delete(@PathVariable Long id) {
-        Expense expense = expenseRepository.findOne(id);
+        Expense expense = expenseRepository.findFirstById(id);
         expenseRepository.delete(expense);
     }
 }

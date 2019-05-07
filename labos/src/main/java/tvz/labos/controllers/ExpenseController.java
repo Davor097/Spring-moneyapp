@@ -11,8 +11,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.support.SessionStatus;
 import tvz.labos.models.*;
 import tvz.labos.repositories.ExpenseRepository;
-import tvz.labos.repositories.JdbcExpenseRepository;
-import tvz.labos.repositories.JdbcWalletRepository;
 import tvz.labos.repositories.WalletRepository;
 import tvz.labos.utils.SecurityUtils;
 
@@ -43,7 +41,7 @@ public class ExpenseController {
             return null;
         }
 
-        Wallet wallet = walletRepository.findOneByOwner(owner);
+        Wallet wallet = walletRepository.findFirstByOwner(owner);
 
         if (wallet == null) {
             wallet = new Wallet();
@@ -60,7 +58,7 @@ public class ExpenseController {
     public void updateWallet(Wallet wallet) {
         ArrayList<Expense> expenses = new ArrayList<>();
         wallet.setExpenses(new ArrayList<>());
-        expenseRepository.findAllByWalletId(wallet.getId()).forEach(expenses::add);
+        expenseRepository.findAllByWallet(wallet).forEach(expenses::add);
         expenses.forEach(wallet::addExpense);
         wallet.updateAmount();
     }
@@ -104,12 +102,28 @@ public class ExpenseController {
         model.addAttribute("date", date);
         logger.info("Expense object filled with data");
         expense.setDate(LocalDateTime.now());
-        expenseRepository.save(expense, wallet);
+        expense.setWallet(wallet);
+        expenseRepository.save(expense);
         logger.info("New expense saved.");
         updateWallet(wallet);
         logger.info("Wallet updated.");
 
         return "resultPage";
+    }
+
+    @GetMapping("/search")
+    public String search(Model model) {
+        model.addAttribute("expense", new Expense());
+        return "searchPageOne";
+    }
+
+    @PostMapping("/search")
+    public String searchResult(Expense expense, Model model) {
+        List<Expense> expenses = expenseRepository.findAllByNameLike(expense.getName());
+        model.addAttribute("expenses", expenses);
+        model.addAttribute("expense", expense);
+
+        return "searchPageTwo";
     }
 
     @GetMapping("/editor")

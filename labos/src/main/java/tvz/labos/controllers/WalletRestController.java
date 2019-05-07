@@ -27,7 +27,7 @@ public class WalletRestController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Wallet> findOne(@PathVariable Long id) {
-        Wallet wallet = walletRepository.findOne(id);
+        Wallet wallet = walletRepository.findFirstById(id);
         if (wallet != null) {
             return new ResponseEntity<>(wallet, HttpStatus.OK);
         } else {
@@ -49,7 +49,7 @@ public class WalletRestController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/{id}")
     public void delete(@PathVariable Long id) {
-        Wallet wallet = walletRepository.findOne(id);
+        Wallet wallet = walletRepository.findFirstById(id);
         walletRepository.delete(wallet);
     }
 }
